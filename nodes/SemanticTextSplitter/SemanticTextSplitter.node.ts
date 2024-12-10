@@ -72,6 +72,13 @@ export class SemanticTextSplitter implements INodeType {
 				default: 100,
 				required: true,
 			},
+			{
+				displayName: 'Sentence Delimiters',
+				name: 'delimiters',
+				type: 'string',
+				default: '.!?',
+				required: true,
+			},
 		],
 	};
 
@@ -80,6 +87,7 @@ export class SemanticTextSplitter implements INodeType {
 
 		const splitter = new SemanticTextSplitterClass({
 			breakpointThreshold: this.getNodeParameter('breakpointThreshold', itemIndex) as number,
+			delimiters: [...(this.getNodeParameter('delimiters', itemIndex) as string)],
 			embeddings: (await this.getInputConnectionData(
 				NodeConnectionType.AiEmbedding,
 				0,

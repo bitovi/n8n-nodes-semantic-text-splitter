@@ -1,6 +1,6 @@
 {
   "name": "@bitovi/n8n-nodes-semantic-text-splitter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "N8N node for semantic text splitting",
   "keywords": [
     "n8n-community-node-package"

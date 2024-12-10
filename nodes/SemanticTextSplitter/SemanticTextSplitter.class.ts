@@ -5,6 +5,7 @@ type Embedding = number[];
 
 export interface SemanticTextSplitterParams {
 	breakpointThreshold: number;
+	delimiters: string[];
 	embeddings: Embeddings;
 	minChunkSize: number;
 	windowSize: number;
@@ -12,6 +13,7 @@ export interface SemanticTextSplitterParams {
 
 export class SemanticTextSplitter extends TextSplitter implements SemanticTextSplitterParams {
 	breakpointThreshold: number;
+	delimiters: string[];
 	embeddings: Embeddings;
 	minChunkSize: number;
 	windowSize: number;
@@ -20,6 +22,7 @@ export class SemanticTextSplitter extends TextSplitter implements SemanticTextSp
 		super();
 
 		this.breakpointThreshold = fields.breakpointThreshold ?? 0.95;
+		this.delimiters = fields.delimiters ?? ['.', '!', '?'];
 		this.embeddings = fields.embeddings;
 		this.minChunkSize = fields.minChunkSize ?? 100;
 		this.windowSize = fields.windowSize ?? 3;
@@ -49,8 +52,15 @@ export class SemanticTextSplitter extends TextSplitter implements SemanticTextSp
 	}
 
 	_splitIntoSentences(text: string): string[] {
-		// Basic sentence splitting - can be improved with better regex or NLP
-		return text.match(/[^.!?]+[.!?]+/g) || [text];
+		// Escape special regex characters and join with |
+		const escapedDelimiters = this.delimiters
+			.map((delimiter) => delimiter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+			.join('');
+
+		// Create regex pattern using the delimiters
+		const pattern = new RegExp(`[^${escapedDelimiters}]+[${escapedDelimiters}]+`, 'g');
+
+		return text.match(pattern) || [text];
 	}
 
 	_createSlidingWindows(sentences: string[]): string[] {

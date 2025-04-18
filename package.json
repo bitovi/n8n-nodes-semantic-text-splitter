@@ -40,6 +40,8 @@
     ]
   },
   "devDependencies": {
+    "@langchain/core": "^0.3.45",
+    "@langchain/textsplitters": "^0.1.0",
     "@n8n/n8n-nodes-langchain": "^1.71.0",
     "@typescript-eslint/parser": "^7.15.0",
     "eslint": "^8.56.0",

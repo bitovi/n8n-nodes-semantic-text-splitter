@@ -60,7 +60,8 @@ export class SemanticTextSplitter extends TextSplitter implements SemanticTextSp
 		// Create regex pattern using the delimiters
 		const pattern = new RegExp(`[^${escapedDelimiters}]+[${escapedDelimiters}]+`, 'g');
 
-		return text.match(pattern) || [text];
+		return (text.match(pattern) || [text])
+			.map((sentence) => sentence.trim());
 	}
 
 	_createSlidingWindows(sentences: string[]): string[] {
